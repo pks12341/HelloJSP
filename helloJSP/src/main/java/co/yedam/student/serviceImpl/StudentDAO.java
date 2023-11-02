@@ -60,17 +60,17 @@ public class StudentDAO {
 		// 목록 : list
 		// 조회 : select
 	}
-
+//nvl ?값이 null이면 student_dept(원래있던 값)을 넣는다는뜻
 	public int update(StudentVO vo) {
 		String sql = "update student set student_name=?,student_password=?,"
-				+ " student_dept=?, student_birthday=? where student_id=?";
+				+ " student_dept=nvl(?, student_dept), student_birthday=? where student_id=?";
 		conn = ds.getConnection();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
 			int rowNo = 1;
 			psmt = conn.prepareStatement(sql);
-		
+
 			psmt.setString(rowNo++, vo.getStudentName());
 			psmt.setString(rowNo++, vo.getStudentPassword());
 			psmt.setString(rowNo++, vo.getStudentDept());

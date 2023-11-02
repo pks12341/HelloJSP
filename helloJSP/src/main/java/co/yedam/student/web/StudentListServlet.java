@@ -48,22 +48,21 @@ public class StudentListServlet extends HttpServlet {
 		String age = req.getParameter("age");
 		System.out.println(name + "," + age);
 		System.out.println("service call.");
-		
-		//d응답정보의 컨텐트타입, 인코딩처리 메소드
-		resp.setCharacterEncoding("utf-8");//한글이있으면 이렇게처리..
+
+		// d응답정보의 컨텐트타입, 인코딩처리 메소드
+		resp.setCharacterEncoding("utf-8");// 한글이있으면 이렇게처리..
 		resp.setContentType("text/json;charset=utf-8");
-		
-		//학생정보를 json포맷으로 전송.
+
+		// 학생정보를 json포맷으로 전송.
 		StudentService svc = new StudentServiceImpl();
 		List<StudentVO> list = svc.listStudent();
-		
-		//java 객체 -> json문자열로변경
-		Gson gson = new GsonBuilder().create();
+
+		// java 객체 -> json문자열로변경
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		String json = gson.toJson(list);
-		
 
 		PrintWriter out = resp.getWriter();
-		
+
 		out.println(json);
 	}
 

@@ -11,6 +11,7 @@ public class StudentServiceImpl implements StudentService{
 
 	@Override
 	public boolean addStudent(StudentVO vo) {
+		System.out.println(vo);
 		return dao.insert(vo) == 1;
 	}
 
