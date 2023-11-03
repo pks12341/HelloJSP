@@ -1,14 +1,44 @@
+//std.js
+
+import svc from './service.js';
+
 //페이지 로딩되면서 바로 실행되는 코드
-fetch('../studentList.do')
-	.then(resolve => resolve.json())
-	.then(result => {
+//비동기방식코드 ->순차적 가독성 높이기.async,await.사용해보기..
+
+//async가 함수()앞에 선언 await는 async안에서만
+//async function(
+//await 처리. (promise객체 반환)
+//await
+//await
+//)
+//svc.studentList(function(result)=>{},function(err){});//아래처럼 화살표함수로 나타낼수있다
+
+//학생목록 출력
+svc.studentList( //성공후 실행함수
+	result => {
 		console.log(result)
 		let tbody = document.querySelector('#list');
 		result.forEach(student => {
 			tbody.append(makeTr(student));
 		})
-	})
-	.catch(err => console.log('error=>', err))
+	},
+	//실패후실행함수
+	err => console.log('error =>', err)
+);
+
+//아래 코드↓를 위↑처럼 만들어 봤다..
+
+// fetch('../studentList.do')
+// 	.then(resolve => resolve.json())
+// 	.then(result => {
+// 		console.log(result)
+// 		let tbody = document.querySelector('#list');
+// 		result.forEach(student => {
+// 			tbody.append(makeTr(student));
+// 		})
+// 	})
+// 	.catch(err => console.log('error=>', err))
+
 
 //등록버튼 이벤트
 //const myButton = document.getElementById("my-button");
@@ -35,26 +65,25 @@ function addCallback(e) {
 	//get : url 패턴.값의 제한이 있다..
 	//post : 파라미터 표현X, 값의제한X, content-type 지정.
 	//fetch('../addStudent.do?'+ param) = get방식 요청 
-	fetch('../addStudent.do', {
-		method: 'post',   //주소창에 비밀번호 표시 방지
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: param
-	})
-		.then(resolve => resolve.json())
-		.then(result => {
-			if (result.retCode == 'OK') {
-				alert('성공')
-				let tr = makeTr({ studentId: sid, studentName: sname, studentBirthday: birth });
-				document.querySelector('#list').append(tr);//화면(밑에 나오는 표)에 추가하기
-			} else {
-				alert('실패')
-			}
-		})
-		.catch(err => console.log('error=>', err));
-
+	//fetch('../addStudent.do', {
+	//		method: 'post',   //주소창에 비밀번호 표시 방지
+	//		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	//		body: param
+	//})
+	//		.then(resolve => resolve.json())
+	//	.then(result => {
+	//		if (result.retCode == 'OK') {
+	//			alert('성공')
+	//			let tr = makeTr({ studentId: sid, studentName: sname, studentBirthday: birth });
+	//			document.querySelector('#list').append(tr);//화면(밑에 나오는 표)에 추가하기
+	//		} else {
+	//			alert('실패')
+	//		}
+	//	})
+	//	.catch(err => console.log('error=>', err));
 }
-//end of addcallback
 
+//모달 보여주기
 function modifyCallback(e) {
 	let id = document.querySelector('.modal-body input[name=sid]').value;
 	let pass = document.querySelector('.modal-body input[name=pass]').value;
@@ -62,37 +91,33 @@ function modifyCallback(e) {
 	let birth = document.querySelector('.modal-body input[name=birth]').value;
 	let param = `id=${id}&name=${name}&password=${pass}&birthday=${birth}`;
 
-	fetch('../editStudent.do', {
-		method: 'post',   //주소창에 비밀번호 표시 방지
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: param
-	})
-		.then(resolve => resolve.json())
-		.then(result => {
-
+	svc.editStudent(
+		// 1) optObj
+		{
+			method: 'post',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: param
+		},
+		// 2) success
+		result => {
+			console.log(result);
 			if (result.retCode == 'OK') {
-				alert('성공')
-				result.vo.studentId
-				let targetTr = document.querySelector('tr[data-sid=' + result.vo.studentId + ']')
-				let newTr = makeTr(result.vo);
-				let parentElem = document.querySelector('#list')
-				parentElem.replaceChild(newTr, targetTr); //새로운 tr로 교체 replacechild알아두기
-				document.getElementById("myModal").style.display = 'none';
-				
-			//	let list = document.querySelector("#list");
-			//	for (let i = 0; i < list.children.length; ++i) {
+				alert('수정 성공');
+				let trTags = document.getElementById('list').querySelectorAll('tr');
+				trTags.forEach(obj => {
+					if (obj.childNodes[0].innerText == id) {
+						obj.childNodes[1].innerHTML = name;
+						obj.childNodes[2].innerHTML = birth;
+					}
+					//3) eroorCall
 
-			//		if (list.children[i].children[0].innerHTML == id) {
-			//			//찾음!
-			//			// 해당 tr노드의 자식노드들 모두 변경.	
-				//	}
-			//	}
+				});
 			} else {
-				alert('실패')
-				console.log(result)
+				alert('수정 실패');
 			}
-		})
-		.catch(err => console.log('error=>', err));
+		},
+		err => console.log('err', err)
+		);
 }
 //end of modifycallback
 
@@ -120,26 +145,26 @@ function makeTr(obj) {
 	btn.innerHTML = '삭제';
 	btn.addEventListener('click', function(e) {
 		//ajax 호출.->servlet실행한다는 의미
-		fetch('../delStudent.do?sid=' + obj.studentId)
-			.then(resolve => resolve.json())
-			.then(result => {
-				console.log(result);
+		svc.removeStudent(obj.studentId,
+			result => {
 				if (result.retCode == 'OK') {
 					alert('삭제성공')
 					tr.remove();
 				} else {
 					alert('삭제실패')
 				}
-			})
-			.catch(err => console.log('error: ', err));
-	})
-	td.append(btn);
-	tr.append(td);
+			},
+			err => console.log('error: ', err)
+		);
+		td.append(btn);
+		tr.append(td);
 
-	return tr;
-}//end of makeTr
+		return tr;
+	}
+}
 
-//모달 보여주기
+
+
 function showModal(e) {
 	console.log(e.target.parentElement, this);
 	let id = this.children[0].innerHTML;
@@ -163,28 +188,20 @@ function showModal(e) {
 			modal.style.display = "none";
 		}
 	}
+	svc.getStudent(id,
+		result => {
+			modal.style.display = "block";
 
-	fetch("../getStudent.do?sid=" + id)
-		.then(resolve => resolve.json())
-		.then(result => {
-			if (result.retCode == "OK") {
-				console.log("ㅎㅇㅎㅇ");
 
-				modal.querySelector('h2').innerHTML = result.vo.studentName;
-				document.querySelector('.modal-body input[name=sid]').value = result.vo.studentId;
-				document.querySelector('.modal-body input[name=name]').value = result.vo.studentName;
-				document.querySelector('.modal-body input[name=pass]').value = result.vo.studentPassword;
-				document.querySelector('.modal-body input[name=birth]').value = result.vo.studentBirthday;
+			modal.querySelector('h2').innerHTML = result.vo.studentName;
+			document.querySelector('.modal-body input[name=sid]').value = result.vo.studentId;
+			document.querySelector('.modal-body input[name=name]').value = result.vo.studentName;
+			document.querySelector('.modal-body input[name=pass]').value = result.vo.studentPassword;
+			document.querySelector('.modal-body input[name=birth]').value = result.vo.studentBirthday;
 
-			} else {
 
-			}
-		})
-		.catch(reject => {
-			console.log("에러");
+			err => console.log('error=>', err)
 		})
 
 	// Get the modal
-
-	modal.style.display = "block";
 }
