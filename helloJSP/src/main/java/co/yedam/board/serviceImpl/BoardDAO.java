@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.yedam.board.service.BoardVO;
+import co.yedam.board.service.MemberVO;
 import co.yedam.common.DataSource;
 
 public class BoardDAO {
@@ -87,15 +88,19 @@ public class BoardDAO {
 	}
 
 	public int insert(BoardVO vo) {
-		sql = "INSERT INTO BOARD(BOARD_NO, TITLE, CONTENT, WRITER)" + "VALUES(seq_board.nextval, ?,?,?)";
+		sql = "INSERT INTO BOARD(BOARD_NO, TITLE, CONTENT, WRITER, image)" + "VALUES(seq_board.nextval, ?,?,?,?)";
 		conn = ds.getConnection();
+		System.out.println(vo);
 		try {
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, vo.getTitle());
 			psmt.setString(2, vo.getContent());
 			psmt.setString(3, vo.getWriter());
+			psmt.setString(4, vo.getImage());
+
 			int r = psmt.executeUpdate();
 			return r;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -105,15 +110,16 @@ public class BoardDAO {
 	}
 
 	public int update(BoardVO vo) {
-		sql = "UPDATE BOARD SET TITLE=?, CONTENT=?, " + "IMAGE=nvl(?,image), LAST_UPDATE=SYSDATE" + "WHERE BOARD_NO=?";
-		conn = ds.getConnection();
+		sql = "UPDATE BOARD SET TITLE=?, CONTENT=?,WRITER =?, IMAGE=nvl(?,image), LAST_UPDATE=SYSDATE WHERE BOARD_NO=?";
+		conn = ds.getConnection(); // nvl(?, image)는 ?에 값이 있으면 그 값을 반환하고, ?가 NULL인 경우 "image" 값을 반환하는 것을 의미
 
 		try {
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, vo.getTitle());
 			psmt.setString(2, vo.getContent());
 			psmt.setString(3, vo.getWriter());
-			psmt.setInt(4, vo.getBoardNo());
+			psmt.setString(4, vo.getImage());
+			psmt.setInt(5, vo.getBoardNo());
 
 			int r = psmt.executeUpdate();
 			return r;
@@ -168,4 +174,59 @@ public class BoardDAO {
 
 	}
 
+	// 아이디/비번 을 받아서 값이있는지 없는지 체크 => 조회값 boolean..
+	public MemberVO getUser(String id, String pw) {
+		sql = "select * from member where mid=? and pass =?";
+		conn = ds.getConnection();
+		MemberVO vo = null;
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, id);
+			psmt.setString(2, pw);
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				vo = new MemberVO();
+				vo.setMid(rs.getString("mid"));
+				vo.setPass(rs.getString("pass"));
+				vo.setName(rs.getString("name"));
+				vo.setPhone(rs.getString("phone"));
+				System.out.println("dao값읽어오기 : " + rs.getString("responsibility"));
+				vo.setResponsibility(rs.getString("responsibility"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return vo;
+	}
+	
+	
+//	public List<MemberVO> selectList() {
+//		sql = "select * from member 
+//		conn = ds.getConnection();
+//		try {
+//			psmt = conn.prepareStatement(sql);
+//			psmt.setString(1, id);
+//			psmt.setString(2, pw);
+//			rs = psmt.executeQuery();
+//
+//			if (rs.next()) {
+//			MemberVO vo = new MemberVO();
+//			vo.setMid(rs.getString("mid"));
+//			vo.setName(rs.getString("name"));
+//			vo.setPass(rs.getString("pass"));
+//			vo.setPhone(rs.getString("phone"));
+//			vo.setResponsibility(rs.);
+//			}
+//
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			close();
+//		}
+//		return null;
+//	}
 }
