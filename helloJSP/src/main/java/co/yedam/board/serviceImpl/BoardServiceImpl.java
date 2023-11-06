@@ -43,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<MemberVO> memberList() {
 		// TODO Auto-generated method stub
-		return dao.;
+		return dao.memberList();
 	}
 
 }

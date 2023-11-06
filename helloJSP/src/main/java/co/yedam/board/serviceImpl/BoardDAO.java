@@ -201,32 +201,31 @@ public class BoardDAO {
 		}
 		return vo;
 	}
-	
-	
-//	public List<MemberVO> selectList() {
-//		sql = "select * from member 
-//		conn = ds.getConnection();
-//		try {
-//			psmt = conn.prepareStatement(sql);
-//			psmt.setString(1, id);
-//			psmt.setString(2, pw);
-//			rs = psmt.executeQuery();
-//
-//			if (rs.next()) {
-//			MemberVO vo = new MemberVO();
-//			vo.setMid(rs.getString("mid"));
-//			vo.setName(rs.getString("name"));
-//			vo.setPass(rs.getString("pass"));
-//			vo.setPhone(rs.getString("phone"));
-//			vo.setResponsibility(rs.);
-//			}
-//
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			close();
-//		}
-//		return null;
-//	}
+
+	public List<MemberVO> memberList() {
+		sql = "SELECT * FROM MEMBER";
+		conn = ds.getConnection();
+		List<MemberVO> list = new ArrayList<>();
+		try {
+			psmt = conn.prepareStatement(sql);
+			rs = psmt.executeQuery();
+
+			while (rs.next()) {
+				MemberVO vo = new MemberVO();
+				vo.setMid(rs.getString("mid"));
+				vo.setName(rs.getString("name"));
+				vo.setPass(rs.getString("pass"));
+				vo.setPhone(rs.getString("phone"));
+				vo.setResponsibility(rs.getString("responsibility"));
+				list.add(vo);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return list;
+	}
 }
