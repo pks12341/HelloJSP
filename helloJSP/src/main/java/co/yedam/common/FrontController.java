@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import co.yedam.board.web.AddBoardControl;
+import co.yedam.board.web.AddReplyControl;
 import co.yedam.board.web.BoardFormControl;
 import co.yedam.board.web.BoardListControl;
 import co.yedam.board.web.GetBoardControl;
@@ -18,6 +19,7 @@ import co.yedam.board.web.ModifyBoardControl;
 import co.yedam.board.web.ModifyControl;
 import co.yedam.board.web.RemoveBoardControl;
 import co.yedam.board.web.RemoveFormControl;
+import co.yedam.reply.web.ReplyListControl;
 
 //url : *.do
 public class FrontController extends HttpServlet {
@@ -49,6 +51,10 @@ public class FrontController extends HttpServlet {
 		map.put("/removeForm.do", new RemoveFormControl());
 		map.put("/removeBoard.do", new RemoveBoardControl());
 		
+		
+		//댓글 목록
+		map.put("/replyList.do", new ReplyListControl());
+		map.put("/addReply.do", new AddReplyControl());		
 	}
 
 	@Override

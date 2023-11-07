@@ -1,24 +1,54 @@
 package co.yedam.common;
 
-import co.yedam.board.service.BoardService;
-import co.yedam.board.service.BoardVO;
-import co.yedam.board.serviceImpl.BoardDAO;
-import co.yedam.board.serviceImpl.BoardServiceImpl;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import co.yedam.reply.mapper.ReplyMapper;
+import co.yedam.reply.service.ReplyVO;
 
 public class MainExe {
 	public static void main(String[] args) {
+		SqlSession session = //
+				DataSourceMybatis.getInstance().openSession(true);
+		ReplyMapper mapper = session.getMapper(ReplyMapper.class);
+		ReplyVO vo1 = new ReplyVO();
+		List<ReplyVO> list = mapper.replyList(1);
+		list.forEach(vo -> System.out.println(vo));
+		
+//		ReplyVO s = mapper.selectReply(5);
+//		System.out.println(s);
+//		
+//		int a = mapper.insertReply(vo1);
+//		System.out.println(a);
+//		
+//		int b = mapper.deleteReply(vo1);
+//		System.out.println(b);
+//		
+//		int b = mapper.updateReply(vo1) ;
+//		System.out.println(b);
+//		
+		
+		
+		
+	
+		
+		
 		// 목록 / boardList.do / boardList.jsp
 		// 조회 / getBoard.do / getBoard.jsp
 		// 등록 / boardForm.do / boardForm.jsp
 		// 처리 / addBoard.do / boardList.jsp
-
-		BoardService svc = new BoardServiceImpl();
-		BoardDAO dao = new BoardDAO();
-		BoardVO vo = new BoardVO();
-		vo.setTitle("test");
-		vo.setWriter("user032");
-		vo.setContent("content");
-		vo.setBoardNo(5);
+//
+//		BoardService svc = new BoardServiceImpl();
+//		BoardDAO dao = new BoardDAO();
+//		BoardVO vo = new BoardVO();
+//		vo.setTitle("test");
+//		vo.setWriter("user032");
+//		vo.setContent("content");
+//		vo.setBoardNo(5);
+		
+		
+		
 		// System.out.println(svc.update(vo));
 
 		// 학생아이디, 비밀번호, 이름 ,학과, 생일
