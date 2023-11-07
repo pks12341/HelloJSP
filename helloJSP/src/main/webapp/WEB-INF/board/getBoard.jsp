@@ -83,7 +83,7 @@ System.out.println(vo);
 
 <h3>댓글목록</h3>
 <ul id="list">
-	<li style="display: none;" id="template"><span>00</span><b>첫번째글입니다.</b><span>user01</span><span>2023-10-10</span></li>
+	<li style="display: none;" id="template"><span>00</span><b>첫번째글입니다.</b><span>user01</span><span>2023-10-10</span><button id = "delReply">삭제</button></li>
 
 </ul>
 
@@ -149,6 +149,21 @@ System.out.println(vo);
 			temp.querySelector('b').innerHTML=reply.reply;
 			temp.querySelector('span:nth-of-type(2)').innerHTML=reply.replyer;
 			temp.querySelector('span:nth-of-type(3)').innerHTML=reply.replyDate;
+			
+			temp.querySelector('#delReply').addEventListener('click' , function(e){ 
+				fetch('delReply.do?rno=' + reply.replyNo)
+				.then(resolve => resolve.json())
+				.then(result => {
+					console.log(result);
+					if(result.retCode == 'OK'){
+						alert('삭제성공');
+						temp.remove();
+					}else {
+						alert('삭제실패');
+					}
+				})
+				
+			})
 			return temp;
 		}
 	
