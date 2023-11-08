@@ -1,23 +1,42 @@
 package co.yedam.common;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import co.yedam.reply.mapper.ReplyMapper;
-import co.yedam.reply.service.ReplyVO;
 
 public class MainExe {
 	public static void main(String[] args) {
 		SqlSession session = //
 				DataSourceMybatis.getInstance().openSession(true);
 		ReplyMapper mapper = session.getMapper(ReplyMapper.class);
-		ReplyVO vo1 = new ReplyVO();
-		List<ReplyVO> list = mapper.replyList(1);
-		list.forEach(vo -> System.out.println(vo));
+		
+		List<Map<String, Object>> map = mapper.getReplyCountByWriter();
+		System.out.println(map);
+		
+		
+		
+		//mapper.replyList(1, 3).forEach(rep -> System.out.println(rep));
+	
+		
+		
+		
+		
+//		
+//		ReplyVO vo1 = new ReplyVO();
+//		List<ReplyVO> list = mapper.replyList(1);
+//		list.forEach(vo -> System.out.println(vo));
+		
+		
 		
 //		ReplyVO s = mapper.selectReply(5);
 //		System.out.println(s);
+//		
+//		vo1.setReply("안녕하세요");
+//		vo1.setReplyer("박경석");
+//		vo1.
 //		
 //		int a = mapper.insertReply(vo1);
 //		System.out.println(a);
@@ -27,7 +46,7 @@ public class MainExe {
 //		
 //		int b = mapper.updateReply(vo1) ;
 //		System.out.println(b);
-//		
+		
 		
 		
 		

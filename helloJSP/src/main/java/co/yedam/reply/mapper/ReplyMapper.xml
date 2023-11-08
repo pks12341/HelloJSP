@@ -5,8 +5,19 @@
 
 	<select id="replyList"
 		resultType="co.yedam.reply.service.ReplyVO" >
-		select * from reply where board_no = #{boardNo} order by
-		reply_no
+		
+		<!-- CDATA를 안하면 등호 부등호를 인식못한다.. -->
+		<![CDATA[ 
+	Select * 
+	from(
+   	  	 Select /*+INDEX(r reply_pk)*/ rownum rn,r.* 
+     	 from reply r    
+    	 where r.board_no=#{boardNo}
+        )a
+	where a.rn > (#{page}-1) * 5
+	and a.rn <= (#{page}) * 5
+		]]>
+		
 	</select>
 
 	<select id="selectReply"
@@ -41,5 +52,17 @@
 		delete from
 		reply where reply_no=#{replyNo}
 	</delete>
+	
+	<select id = "getTotalCnt" resultType = "int">
+		select count(*) from reply where board_no = #{boardNo}
+			
+	</select>
+	
+	<select id = "getReplyCountByWriter" resultType = "map">
+	select replyer, count(*) cnt
+	from reply
+	group by replyer
+		
+	</select>
 
 </mapper>

@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@include file="../layout/menu.jsp"%>
-<%@include file="../layout/header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<jsp:include page="../layout/menu.jsp"></jsp:include>
+<jsp:include page="../layout/header.jsp"></jsp:include>
 
 <h3>게시글 등록화면</h3>
 <form action="addBoard.do" method="post" enctype="multipart/form-data">
@@ -13,7 +14,7 @@
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td><input type="text" readonly class="form-control" name="writer" value = "<%=logId %>"></td> <!--readonly 값수정불가  -->
+			<td><input type="text" readonly class="form-control" name="writer" value = "${logId }"></td> <!--readonly 값수정불가  -->
 		</tr>
 		<tr>
 			<td colspan="2"><textarea cols="31" class="form-control"
@@ -33,4 +34,4 @@
 
 </form>
 
-<%@include file="../layout/footer.jsp"%>
+<jsp:include page="../layout/footer.jsp"></jsp:include>

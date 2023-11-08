@@ -8,9 +8,7 @@
 <title>첫페이지 입니다.(index.jsp)</title>
 </head>
 <body>
-	<%
-	response.sendRedirect("main.do"); /* hellojsp를 실행해보면 <-때문에 boardList가 첫페이지로 실행된다 */
-	%>
+	<jsp:forward page="main.do"></jsp:forward>
 
 </body>
 </html>

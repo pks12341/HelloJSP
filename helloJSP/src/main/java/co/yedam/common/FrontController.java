@@ -20,6 +20,7 @@ import co.yedam.board.web.ModifyBoardControl;
 import co.yedam.board.web.ModifyControl;
 import co.yedam.board.web.RemoveBoardControl;
 import co.yedam.board.web.RemoveFormControl;
+import co.yedam.board.web.RemoveReplyControl;
 import co.yedam.reply.web.ReplyListControl;
 
 //url : *.do
@@ -57,7 +58,12 @@ public class FrontController extends HttpServlet {
 		map.put("/replyList.do", new ReplyListControl());
 		map.put("/addReply.do", new AddReplyControl());		
 		//댓글삭제
-		map.put("/delReply.do", new DelReplyControl());
+	//	map.put("/delReply.do", new DelReplyControl());
+		map.put("/removeReply.do", new RemoveReplyControl());
+		
+		//차트
+		map.put("/chartForm.do", new ChartFormControl());
+		map.put("/drawChart.do", new DrawChartControl());
 	}
 
 	@Override
@@ -74,10 +80,6 @@ public class FrontController extends HttpServlet {
 		Command controller = map.get(page);
 		System.out.println("호출 page : " + page);
 		controller.execute(req, resp);
-		
-		
-		
-
 	}
 
 }

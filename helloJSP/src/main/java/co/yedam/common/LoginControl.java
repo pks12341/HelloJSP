@@ -26,8 +26,11 @@ public class LoginControl implements Command {
 			HttpSession session = req.getSession();	 // 세션정보 가져옴
 			session.setAttribute("logId", id); //인터넷창 닫지않는 이상 유ㅜ지됨
 			if(vo.getResponsibility().toUpperCase().equals("ADMIN")) {
-				session.setAttribute("admin", "OK");
+				session.setAttribute("responsibility", vo.getResponsibility());
 			}
+		//	if(vo.getResponsibility()=="ADMIN") {
+		//		session.setAttribute("responsibility", "admin");
+		//	}
 			
 			try {
 				resp.sendRedirect("boardList.do");

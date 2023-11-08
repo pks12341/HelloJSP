@@ -1,6 +1,7 @@
 package co.yedam.reply.serviceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -15,9 +16,9 @@ public class ReplyServiceImpl implements ReplyService {
 	private SqlSession session = DataSourceMybatis.getInstance().openSession(true);
 	private ReplyMapper mapper = session.getMapper(ReplyMapper.class);
 	@Override
-	public List<ReplyVO> replyList(int boardNo) {
+	public List<ReplyVO> replyList(int boardNo, int page) {
 		// TODO Auto-generated method stub
-		return mapper.replyList(boardNo);
+		return mapper.replyList(boardNo,page);
 	}
 
 	@Override
@@ -42,6 +43,16 @@ public class ReplyServiceImpl implements ReplyService {
 	public boolean delReply(int replyNo) {
 		// TODO Auto-generated method stub
 		return mapper.deleteReply(replyNo) > 0;
+	}
+
+	@Override
+	public int getTotalCnt(int boardNo) {
+		return mapper.getTotalCnt(boardNo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getReplyCountByWriter() {
+		return mapper.getReplyCountByWriter();
 	}
 
 }
