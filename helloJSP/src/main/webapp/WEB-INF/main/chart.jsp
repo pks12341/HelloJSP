@@ -17,10 +17,11 @@
 		  console.log(result);
 		  let dataAry =[['Writer','Cnt']];
 		  result.forEach(item =>{
-			  dataAry.push([item.REPLYER, item.CNT])
+			  dataAry.push([item.replyer, item.cnt])
 		  })
-		  console.log(dataAry)
-		  var data = google.visualization.arrayToDataTable(DataAry);
+		  //[['writer','cnt'],['m001',12],['m001',12],['m001',12]]
+		  console.log(dataAry);
+		  var data = google.visualization.arrayToDataTable(dataAry);
 	      
 
 		    var options = {

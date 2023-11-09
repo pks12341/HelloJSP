@@ -49,7 +49,7 @@
 				<c:if test ="${!empty responsibility && responsibility == 'Admin'  }">
 					<a class="list-group-item list-group-item-action list-group-item-light p-3" href="memberList.do">회원관리</a> 
 				</c:if>
-				   	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
+				   	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="chartForm.do">Chart</a>
 					 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
 					 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
 			</div>

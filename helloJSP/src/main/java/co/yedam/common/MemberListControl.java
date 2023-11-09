@@ -22,7 +22,7 @@ public class MemberListControl implements Command {
 		req.setAttribute("memberList", members);
 		
 		try {
-			req.getRequestDispatcher("WEB-INF/main/memberList.jsp").forward(req, resp);
+			req.getRequestDispatcher("WEB-INF/board/memberList.jsp").forward(req, resp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
